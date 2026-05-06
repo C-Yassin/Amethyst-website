@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amethyst Miner | Next-Gen XMR GUI</title>
+    <link rel="icon" href="icon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #09090b;
+            --surface-color: #18181b;
+            --surface-light: #27272a;
+            --amethyst: #a855f7;
+            --amethyst-glow: rgba(168, 85, 247, 0.4);
+            --crypto-green: #10b981;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--amethyst-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .orb-1 { top: -100px; left: -200px; }
+        .orb-2 { bottom: 10%; right: -100px; }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-family: var(--font-code);
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .brand i { color: var(--amethyst); }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--amethyst); }
+
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--amethyst);
+            color: #000;
+            padding: 8px 0;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+        }
+        .ticker-item { margin-right: 3rem; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .hero {
+            display: flex;
+            align-items: center;
+            min-height: 80vh;
+            gap: 4rem;
+            position: relative;
+        }
+
+        .hero-content { flex: 1; }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--crypto-green);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .pulse-dot {
+            width: 8px; height: 8px;
+            background-color: var(--crypto-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--crypto-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin: 0 0 1.5rem 0;
+            letter-spacing: -2px;
+        }
+
+        h1 span { color: var(--amethyst); }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+
+        .btn-group { display: flex; gap: 1rem; }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--amethyst);
+            color: #000;
+            border: 1px solid var(--amethyst);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--amethyst);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--surface-light);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-main);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .hero-visual {
+            flex: 1;
+            perspective: 1200px;
+        }
+
+        .isometric-wrapper {
+            position: relative;
+            transform: rotateX(15deg) rotateY(-20deg) rotateZ(5deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .isometric-wrapper:hover {
+            transform: rotateX(5deg) rotateY(-10deg) rotateZ(2deg) scale(1.02);
+        }
+
+        .isometric-wrapper img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                -20px 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .system-specs {
+            padding: 6rem 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 1rem; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .bento-card {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-light);
+            border-radius: 8px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-card:hover { border-color: var(--amethyst); }
+
+        .bento-card img {
+            width: 100%;
+            margin-top: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .bento-card:hover img { transform: translateY(-5px); }
+
+        .bento-tag {
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            color: var(--amethyst);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .bento-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+        }
+
+        .download-terminal {
+            background-color: #050505;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            font-family: var(--font-code);
+            margin: 4rem auto;
+            max-width: 800px;
+        }
+
+        .term-header { color: var(--text-muted); margin-bottom: 1.5rem; border-bottom: 1px dotted #333; padding-bottom: 10px; }
+        .term-line { margin: 10px 0; color: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; padding-bottom: 10px;}
+        .term-line:last-child { border-bottom: none; }
+        .term-os { color: var(--amethyst); }
+        .term-dl:hover { color: var(--crypto-green); cursor: pointer; text-decoration: underline; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 3rem; }
+            .hero-content { display: flex; flex-direction: column; align-items: center; }
+            .btn-group { justify-content: center; }
+            .isometric-wrapper { transform: none; margin-top: 2rem; }
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span class="ticker-item">NETWORK: RANDOM-X</span>
+            <span class="ticker-item">MSR MOD: SUPPORTED</span>
+            <span class="ticker-item">HUGE PAGES: AUTO-CONFIG</span>
+            <span class="ticker-item">ALGORITHM: RX/0</span>
+            <span class="ticker-item">SUPPORT: Windows & Linux</span>
+            <span class="ticker-item">DEV FEE: 1.0%</span>
+        </div>
+    </div>
+
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="container">
+        <nav>
+            <div class="brand">
+                <img src="amethyst.svg" alt="Amethyst Logo" style="height: 38px; width: auto;"> 
+                <span>
+                    <span style="color: var(--amethyst);">Amethyst</span> Miner
+                </span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Architecture</a>
+                <a href="#download">Deploy Node</a>
+                <a href="https://github.com/C-Yassin/Amethyst-Miner" target="_blank">GitHub</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-content">
+                <div class="status-badge">
+                    <div class="pulse-dot"></div> MAINNET SYNCED
+                </div>
+                <h1>Mine Monero<br>With <span>Elegance.</span></h1>
+                <p>A high-performance RandomX CPU miner wrapped in a beautiful, native GUI. Maximize your hash rate without touching the command line.</p>
+                
+                <div class="btn-group">
+                    <a href="#download" class="btn btn-primary"><i class="fa-solid fa-microchip"></i> Initialize Miner</a>
+                    <a href="https://github.com/C-Yassin/Amethyst-Miner" target="_blank" class="btn btn-outline"><i class="fa-solid fa-code-branch"></i> Source Code</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="isometric-wrapper">
+                    <img src="Screenshot4.png" alt="Amethyst Miner Active Dashboard">
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="system-specs">
+            <div class="section-header">
+                <h2>System Architecture</h2>
+                <p style="color: var(--text-muted);">Built for efficiency, designed for control.</p>
+            </div>
+
+            <div class="bento-grid">
+                
+                <div class="bento-card">
+                    <div class="bento-tag">Telemetry Analytics</div>
+                    <h3 class="bento-title">Live Performance Data</h3>
+                    <p style="color: var(--text-muted);">Monitor your exact hashrate trajectory and track your unpaid pool balance growth in real-time with beautiful, hardware-accelerated graphs.</p>
+                    <img src="Screenshot5.png" alt="Network and Hashrate Statistics">
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-tag">Hardware Control</div>
+                    <h3 class="bento-title">Advanced Configuration</h3>
+                    <p style="color: var(--text-muted);">Total control over your rig. Assign specific CPU threads, set process priority, and easily enable the MSR hardware mod directly from the interface.</p>
+                    <img src="Screenshot2.png" alt="Miner Configuration Menu">
+                </div>
+
+            </div>
+        </section>
+
+        <section id="download" class="system-specs" style="padding-top: 0;">
+            <div class="section-header">
+                <h2>Deploy Binary</h2>
+            </div>
+
+            <div class="download-terminal">
+                <div class="term-header">root@amethyst:~# ./fetch_releases --latest</div>
+                
+                <div class="term-line">
+                    <span><span class="term-os">[WIN_64]</span> amethyst-miner-windows.zip</span>
+                    <a id="dl-win" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                </div>
+                
+                <div class="term-line">
+                    <span><span class="term-os">[LINUX_DEB]</span> amethyst-miner-ubuntu.deb</span>
+                    <a id="dl-deb" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                </div>
+
+                <div class="term-line">
+                    <span><span class="term-os">[LINUX_TAR]</span> amethyst-miner-linux.tar.gz</span>
+                    <a id="dl-tar" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                </div>
+
+                <div class="term-line" style="margin-top: 2rem;">
+                    <span style="color: var(--text-muted);">> Status: Ready for compilation from source.</span>
+                    <a href="https://github.com/C-Yassin/Amethyst-Miner" class="term-dl" style="color: var(--amethyst); text-decoration: none;">[ VIEW GITHUB REPOSITORY ]</a>
+                </div>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); font-family: var(--font-code); font-size: 0.8rem;">
+            <p>Amethyst Miner v1.0.0 | Developed by <a style="text-decoration-line: none; color: var(--amethyst);" href="https://github.com/C-Yassin/">C-Yassin</a></p>
+            <p>This software is provided "as is" with a 1% dev fee to support maintenance.</p>
+        </footer>
+    </div>
+
+    <script>
+        async function fetchLatestRelease() {
+            const repo = "C-Yassin/Amethyst-Miner";
+            const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Could not fetch release data");
+                
+                const data = await response.json();
+                
+                data.assets.forEach(asset => {
+                    const fileName = asset.name.toLowerCase();
+                    const dl = asset.browser_download_url;
+
+                    if (fileName.endsWith('.zip') || fileName.endsWith('.exe')) document.getElementById('dl-win').href = dl;
+                    if (fileName.endsWith('.deb')) document.getElementById('dl-deb').href = dl;
+                    if (fileName.endsWith('.tar.gz')) document.getElementById('dl-tar').href = dl;
+                });
+            } catch (error) {
+                console.error("Release fetch failed:", error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', fetchLatestRelease);
+    </script>
+</body>
+</html>
