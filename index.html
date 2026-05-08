@@ -282,7 +282,8 @@
         .term-line { margin: 10px 0; color: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; padding-bottom: 10px;}
         .term-line:last-child { border-bottom: none; }
         .term-os { color: var(--amethyst); }
-        .term-dl:hover { color: var(--crypto-green); cursor: pointer; text-decoration: underline; }
+        .term-dl{ color: var(--text-main); text-decoration: none; }
+        .term-dl:hover { color: var(--crypto-green); cursor: pointer; }
 
         @media (max-width: 900px) {
             .hero { flex-direction: column; text-align: center; padding-top: 3rem; }
@@ -379,23 +380,31 @@
                 <div class="term-header">root@amethyst:~# ./fetch_releases --latest</div>
                 
                 <div class="term-line">
-                    <span><span class="term-os">[WIN_64]</span> amethyst-miner-windows.zip</span>
-                    <a id="dl-win" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                    <span>
+                        <i class="fab fa-windows term-os" style="margin-right: -4px;"></i>
+                        <span class="term-os">[WIN_64]</span> AmethystMiner-v1.0.exe
+                    </span>
+                    <a id="dl-win" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
                 </div>
                 
                 <div class="term-line">
-                    <span><span class="term-os">[LINUX_DEB]</span> amethyst-miner-ubuntu.deb</span>
-                    <a id="dl-deb" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                    <span><i class="fas fa-cube term-os" style="margin-right: 2px;"></i><span class="term-os">[APPIMAGE]</span> AmethystMiner-v1.0-x86_64.appimage</span>
+                    <a id="dl-deb" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
                 </div>
 
                 <div class="term-line">
-                    <span><span class="term-os">[LINUX_TAR]</span> amethyst-miner-linux.tar.gz</span>
-                    <a id="dl-tar" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl" style="color: var(--text-main); text-decoration: none;">[ EXECUTE DOWNLOAD ]</a>
+                    <span><i class="fab fa-debian term-os" style="margin-right: 2px;"></i><span class="term-os">[LINUX_DEB]</span> AmethystMiner-v1.0.deb</span>
+                    <a id="dl-deb" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
+                </div>
+
+                <div class="term-line">
+                    <span><i class="fab fa-linux term-os" style="margin-right: 2px;"></i><span class="term-os">[LINUX_TAR]</span> AmethystMiner-v1.0.tar.gz</span>
+                    <a id="dl-tar" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
                 </div>
 
                 <div class="term-line" style="margin-top: 2rem;">
                     <span style="color: var(--text-muted);">> Status: Ready for compilation from source.</span>
-                    <a href="https://github.com/C-Yassin/Amethyst-Miner" class="term-dl" style="color: var(--amethyst); text-decoration: none;">[ VIEW GITHUB REPOSITORY ]</a>
+                    <a href="https://github.com/C-Yassin/Amethyst-Miner" class="term-dl">[ VIEW GITHUB REPOSITORY ]</a>
                 </div>
             </div>
         </section>
