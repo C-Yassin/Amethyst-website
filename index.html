@@ -389,7 +389,7 @@
                 
                 <div class="term-line">
                     <span><i class="fas fa-cube term-os" style="margin-right: 2px;"></i><span class="term-os">[APPIMAGE]</span> AmethystMiner-v1.0-x86_64.appimage</span>
-                    <a id="dl-deb" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
+                    <a id="dl-appimage" href="https://github.com/C-Yassin/Amethyst-Miner/releases/latest" class="term-dl">[ EXECUTE DOWNLOAD ]</a>
                 </div>
 
                 <div class="term-line">
@@ -432,6 +432,7 @@
 
                     if (fileName.endsWith('.zip') || fileName.endsWith('.exe')) document.getElementById('dl-win').href = dl;
                     if (fileName.endsWith('.deb')) document.getElementById('dl-deb').href = dl;
+                    if (fileName.endsWith('.appimage')) document.getElementById('dl-appimage').href = dl;
                     if (fileName.endsWith('.tar.gz')) document.getElementById('dl-tar').href = dl;
                 });
             } catch (error) {
